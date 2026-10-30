@@ -50,12 +50,12 @@ public class AccountRestController {
         }
     }
 
-    @PutMapping("/accounts/{id}/balance")
-    public AccountResponseDTO updateBalance(
-            @PathVariable UUID id,
-            @RequestBody double balance) {
-        return accountSerivce.updateBalance(id, balance);
-    }
+//    @PutMapping("/accounts/{id}/balance")
+//    public AccountResponseDTO updateBalance(
+//            @PathVariable UUID id,
+//            @RequestBody double balance) {
+//        return accountSerivce.updateBalance(id, balance);
+//    }
 
     @DeleteMapping("/accounts/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable UUID id){

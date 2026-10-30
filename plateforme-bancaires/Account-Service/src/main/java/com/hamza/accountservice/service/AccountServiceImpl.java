@@ -56,18 +56,18 @@ public class AccountServiceImpl implements AccountSerivce{
         if(account == null) throw new AccountNotFound(String.format("Account with id %s not found",id));
         accountRepository.deleteById(id);
     }
-    @Override
-    public AccountResponseDTO updateBalance(UUID id, double balance) throws AccountNotFound {
-        Account account = accountRepository.findById(id).orElse(null);
-
-        if (account == null)
-            throw new AccountNotFound(String.format("Account with id %s not found", id));
-
-        account.setBalance(balance);
-
-        Account savedAccount = accountRepository.save(account);
-
-        return mapper.fromAccount(savedAccount);
-    }
+//    @Override
+//    public AccountResponseDTO updateBalance(UUID id, double balance) throws AccountNotFound {
+//        Account account = accountRepository.findById(id).orElse(null);
+//
+//        if (account == null)
+//            throw new AccountNotFound(String.format("Account with id %s not found", id));
+//
+//        account.setBalance(balance);
+//
+//        Account savedAccount = accountRepository.save(account);
+//
+//        return mapper.fromAccount(savedAccount);
+//    }
 
 }
