@@ -20,26 +20,18 @@ public class TransactionServiceApplication {
         SpringApplication.run(TransactionServiceApplication.class, args);
     }
 
-    @Bean
     CommandLineRunner start(
             TransactionService transactionService,
             AccountServiceClient accountServiceClient) {
 
         return args -> {
 
-            List<Account> accounts = List.of(
-                    accountServiceClient.getAccountById(
-                            java.util.UUID.fromString("ACCOUNT_UUID_1")),
-                    accountServiceClient.getAccountById(
-                            java.util.UUID.fromString("ACCOUNT_UUID_2")),
-                    accountServiceClient.getAccountById(
-                            java.util.UUID.fromString("ACCOUNT_UUID_3"))
-            );
+            List<Account> accounts = accountServiceClient.getAllAccounts();
 
             transactionService.saveTransaction(
                     TransactionRequestDTO.builder()
                             .accountId(accounts.get(0).getId())
-                            .amount(new java.math.BigDecimal("150"))
+                            .amount(new BigDecimal("150"))
                             .currency("MAD")
                             .merchantCategory("FOOD")
                             .country("MA")
@@ -49,7 +41,7 @@ public class TransactionServiceApplication {
             transactionService.saveTransaction(
                     TransactionRequestDTO.builder()
                             .accountId(accounts.get(1).getId())
-                            .amount(new java.math.BigDecimal("200"))
+                            .amount(new BigDecimal("200"))
                             .currency("MAD")
                             .merchantCategory("SHOPPING")
                             .country("MA")
@@ -59,7 +51,7 @@ public class TransactionServiceApplication {
             transactionService.saveTransaction(
                     TransactionRequestDTO.builder()
                             .accountId(accounts.get(2).getId())
-                            .amount(new java.math.BigDecimal("300"))
+                            .amount(new BigDecimal("300"))
                             .currency("MAD")
                             .merchantCategory("TRANSPORT")
                             .country("MA")

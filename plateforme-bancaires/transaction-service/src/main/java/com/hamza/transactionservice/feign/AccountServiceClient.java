@@ -13,6 +13,9 @@ import java.util.UUID;
 @FeignClient(name = "account-service")
 public interface AccountServiceClient {
 
+    @GetMapping("/accounts")
+    List<Account> getAllAccounts();
+
     @GetMapping("/accounts/{id}")
     Account getAccountById(@PathVariable UUID id);
 
