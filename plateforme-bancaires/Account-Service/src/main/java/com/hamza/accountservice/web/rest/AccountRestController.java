@@ -9,6 +9,7 @@ import org.modelmapper.spi.ErrorMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +48,13 @@ public class AccountRestController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new ErrorMessage(e.getMessage()));
         }
+    }
+
+    @PutMapping("/accounts/{id}/balance")
+    public AccountResponseDTO updateBalance(
+            @PathVariable UUID id,
+            @RequestBody double balance) {
+        return accountSerivce.updateBalance(id, balance);
     }
 
     @DeleteMapping("/accounts/{id}")

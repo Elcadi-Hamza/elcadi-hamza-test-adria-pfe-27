@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -54,6 +55,19 @@ public class AccountServiceImpl implements AccountSerivce{
         Account account = accountRepository.findById(id).orElse(null);
         if(account == null) throw new AccountNotFound(String.format("Account with id %s not found",id));
         accountRepository.deleteById(id);
+    }
+    @Override
+    public AccountResponseDTO updateBalance(UUID id, double balance) throws AccountNotFound {
+        Account account = accountRepository.findById(id).orElse(null);
+
+        if (account == null)
+            throw new AccountNotFound(String.format("Account with id %s not found", id));
+
+        account.setBalance(balance);
+
+        Account savedAccount = accountRepository.save(account);
+
+        return mapper.fromAccount(savedAccount);
     }
 
 }

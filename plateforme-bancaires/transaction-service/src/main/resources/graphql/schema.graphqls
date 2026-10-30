@@ -1,0 +1,27 @@
+type Transaction {
+    id: ID
+    accountId: ID
+    amount: Float
+    currency: String
+    merchantCategory: String
+    country: String
+    createdAt: String
+}
+
+input TransactionRequestInput {
+    accountId: ID!
+    amount: Float!
+    currency: String!
+    merchantCategory: String
+    country: String
+}
+
+type Query {
+    getTransaction(id: ID!): Transaction
+    getAllTransactions: [Transaction]
+    getTransactionsByAccount(accountId: ID!): [Transaction]
+}
+
+type Mutation {
+    saveTransaction(requestDTO: TransactionRequestInput!): Transaction
+}

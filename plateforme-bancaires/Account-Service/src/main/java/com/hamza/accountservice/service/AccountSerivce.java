@@ -13,4 +13,5 @@ public interface AccountSerivce {
     AccountResponseDTO getAccountById(UUID id) throws AccountNotFound;
     AccountResponseDTO updateAccount(AccountRequestDTO requestDTO) throws AccountNotFound;
     void deleteAccount(UUID id) throws AccountNotFound;
+    AccountResponseDTO updateBalance(UUID id, double balance) throws AccountNotFound;
 }
