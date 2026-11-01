@@ -11,22 +11,29 @@ import com.hamza.transactionservice.mapper.TransactionMapper;
 import com.hamza.transactionservice.model.Account;
 import com.hamza.transactionservice.model.AccountStatus;
 import com.hamza.transactionservice.repository.TransactionRepository;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service @Transactional
-@Slf4j @AllArgsConstructor
+@Slf4j
 public class TransactionServiceImp implements TransactionService{
+    @Autowired
     private TransactionRepository transactionRepository;
+    @Autowired
     private AccountRestClient accountRestClient;
+    @Autowired
     private TransactionMapper mapper;
+    @Value("${bank.transaction.max-amount}")
+    private BigDecimal maxAmount;
 
     private TransactionResponseDto toResponse(Transaction transaction) {
         TransactionResponseDto responseDto = mapper.fromTransaction(transaction);
@@ -50,7 +57,7 @@ public class TransactionServiceImp implements TransactionService{
     @Override
     public TransactionResponseDto saveTransaction(TransactionRequestDto requestDto) throws AccountNotActif, TransactionAmountNotRespected {
 
-        if(requestDto.getAccountId() == null || requestDto.getAmount().signum() <= 0) {
+        if(requestDto.getAccountId() == null || requestDto.getAmount().signum() <= 0 || requestDto.getAmount().compareTo(maxAmount) > 0) {
             throw new TransactionAmountNotRespected("Amount <= 0");
         }
 
