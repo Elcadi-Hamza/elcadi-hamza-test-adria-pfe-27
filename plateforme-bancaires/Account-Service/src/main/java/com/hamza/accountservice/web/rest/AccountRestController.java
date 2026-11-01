@@ -1,9 +1,10 @@
 package com.hamza.accountservice.web.rest;
 
-import com.hamza.accountservice.dto.AccountRequestDTO;
-import com.hamza.accountservice.dto.AccountResponseDTO;
-import com.hamza.accountservice.exception.AccountNotFound;
-import com.hamza.accountservice.service.AccountSerivce;
+import com.hamza.accountservice.domain.AccountStatus;
+import com.hamza.accountservice.dtos.AccountRequestDto;
+import com.hamza.accountservice.dtos.AccountResponseDto;
+import com.hamza.accountservice.exceptions.AccountNotFound;
+import com.hamza.accountservice.service.AccountService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.spi.ErrorMessage;
 import org.springframework.http.ResponseEntity;
@@ -18,52 +19,50 @@ import static org.springframework.http.ResponseEntity.internalServerError;
 @RestController
 @AllArgsConstructor
 public class AccountRestController {
-    private AccountSerivce accountSerivce;
+    private AccountService accountService;
 
     @GetMapping("/accounts")
-    public List<AccountResponseDTO> listAccounts() {
-        return accountSerivce.listAccount();
+    public List<AccountResponseDto> listAccounts() {
+        return accountService.listAccount();
     }
 
     @GetMapping("/accounts/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable UUID id){
         try {
-            AccountResponseDTO customerById = accountSerivce.getAccountById(id);
+            AccountResponseDto customerById = accountService.getAccountById(id);
             return ResponseEntity.ok(customerById);
         } catch (AccountNotFound e) {
             return internalServerError().body(new ErrorMessage(e.getMessage()));
         }
     }
     @PostMapping("/accounts")
-    public ResponseEntity<?> saveNewAccount(@RequestBody AccountRequestDTO request) {
-        AccountResponseDTO accountResponseDTO = accountSerivce.saveAccount(request);
+    public ResponseEntity<?> saveNewAccount(@RequestBody AccountRequestDto request) {
+        AccountResponseDto accountResponseDTO = accountService.saveAccount(request);
         return ResponseEntity.ok(accountResponseDTO);
     }
 
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<?> updateAccount(@RequestBody AccountRequestDTO request, @PathVariable UUID id){
+    public ResponseEntity<?> updateAccount(@RequestBody AccountRequestDto request, @PathVariable UUID id){
         try {
-            AccountResponseDTO accountResponseDTO = accountSerivce.updateAccount(request);
+            AccountResponseDto accountResponseDTO = accountService.updateAccount(request);
             return ResponseEntity.ok(accountResponseDTO);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new ErrorMessage(e.getMessage()));
         }
     }
 
-//    @PutMapping("/accounts/{id}/balance")
-//    public AccountResponseDTO updateBalance(
-//            @PathVariable UUID id,
-//            @RequestBody double balance) {
-//        return accountSerivce.updateBalance(id, balance);
-//    }
-
     @DeleteMapping("/accounts/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable UUID id){
         try {
-            accountSerivce.deleteAccount(id);
+            accountService.deleteAccount(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(new ErrorMessage(e.getMessage()));
         }
+    }
+
+    @GetMapping("/accounts/{id}/status")
+    public AccountStatus getAccountStatusById(@PathVariable UUID id) {
+        return accountService.getAccountStatus(id);
     }
 }

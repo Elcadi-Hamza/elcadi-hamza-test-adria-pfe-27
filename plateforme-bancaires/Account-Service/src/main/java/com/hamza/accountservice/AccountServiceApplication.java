@@ -1,8 +1,8 @@
 package com.hamza.accountservice;
 
 import com.hamza.accountservice.domain.AccountStatus;
-import com.hamza.accountservice.dto.AccountRequestDTO;
-import com.hamza.accountservice.service.AccountSerivce;
+import com.hamza.accountservice.dtos.AccountRequestDto;
+import com.hamza.accountservice.service.AccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,32 +16,17 @@ public class AccountServiceApplication {
     }
 
     @Bean
-    CommandLineRunner start(AccountSerivce accountSerivce){
-        return args -> {
-            accountSerivce.saveAccount(
-                    AccountRequestDTO.builder()
-                            .customerReference("Reference1")
-                            .status(AccountStatus.ACTIVE)
-                            .currency("MAD")
-                            .balance(12000)
-                            .build()
-            );
-            accountSerivce.saveAccount(
-                    AccountRequestDTO.builder()
-                            .customerReference("Reference2")
-                            .status(AccountStatus.ACTIVE)
-                            .currency("MAD")
-                            .balance(13000)
-                            .build()
-            );
-            accountSerivce.saveAccount(
-                    AccountRequestDTO.builder()
-                            .customerReference("Reference3")
-                            .status(AccountStatus.ACTIVE)
-                            .currency("MAD")
-                            .balance(14000)
-                            .build()
-            );
+    CommandLineRunner start (AccountService service) {
+        return (args) -> {
+            for (int i = 0 ; i < 10 ; i++) {
+                service.saveAccount(AccountRequestDto.builder()
+                        .customerReference("reference " + i)
+                        .status(Math.random() > 0.5 ? AccountStatus.ACTIVE : AccountStatus.BLOCKED )
+                        .currency("MAD")
+                        .balance(i * Math.random()*1000)
+                        .build());
+            }
+
         };
-     }
+    }
 }

@@ -1,21 +1,31 @@
-type Account {
-    id: ID!
-    customerReference: String!
-    status: String!
-    currency: String!
-    balance: Float!
-}
-
-input AccountInput {
-    customerReference: String!
-    currency: String!
-}
-
 type Query {
-    account(id: ID!): Account
-    accounts: [Account!]!
+    accountList: [Account],
+    getAccountById(id : ID) : Account
 }
 
 type Mutation {
-    createAccount(input: AccountInput!): Account
+    saveAccount(requestDto : AccountRequest) : Account,
+    updateAccount(requestDto : AccountRequest) : Account,
+    deleteAccount(id : ID) : Boolean
+}
+
+type Account {
+    id : ID,
+    customerReference : String,
+    status : AccountStatus,
+    currency : String,
+    balance : Float
+}
+
+input AccountRequest {
+    id : ID
+    customerReference : String,
+    status : AccountStatus,
+    currency : String,
+    balance : Float
+}
+
+enum AccountStatus {
+    ACTIVE
+    BLOCKED
 }

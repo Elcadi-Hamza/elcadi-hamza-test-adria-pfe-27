@@ -1,29 +1,24 @@
 package com.hamza.transactionservice.mapper;
 
 import com.hamza.transactionservice.domain.Transaction;
-import com.hamza.transactionservice.dto.TransactionRequestDTO;
-import com.hamza.transactionservice.dto.TransactionResponseDTO;
+import com.hamza.transactionservice.dtos.TransactionRequestDto;
+import com.hamza.transactionservice.dtos.TransactionResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TransactionMapper {
-
-    private final ModelMapper modelMapper = new ModelMapper();
-
-    public TransactionResponseDTO fromTransaction(Transaction transaction) {
-        return modelMapper.map(
-                transaction,
-                TransactionResponseDTO.class
-        );
+    private ModelMapper mapper = new ModelMapper();
+    public TransactionMapper () {
+        mapper.emptyTypeMap(Transaction.class, TransactionResponseDto.class)
+                .addMappings(m-> m.map(Transaction::getAccountId, TransactionResponseDto::setAccountId))
+                .implicitMappings();
+    }
+    public TransactionResponseDto fromTransaction(Transaction transaction) {
+        return mapper.map(transaction, TransactionResponseDto.class);
     }
 
-    public Transaction fromTransactionRequestDTO(
-            TransactionRequestDTO requestDTO) {
-
-        return modelMapper.map(
-                requestDTO,
-                Transaction.class
-        );
+    public Transaction fromTransactionRequestDto (TransactionRequestDto transactionRequestDto) {
+        return mapper.map(transactionRequestDto, Transaction.class);
     }
 }

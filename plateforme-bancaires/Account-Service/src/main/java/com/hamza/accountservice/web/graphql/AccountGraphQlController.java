@@ -1,9 +1,9 @@
-package com.hamza.accountservice.web.graphql;
+package com.hamza.accountservice.web.graphQL;
 
-import com.hamza.accountservice.domain.Account;
-import com.hamza.accountservice.dto.AccountRequestDTO;
-import com.hamza.accountservice.dto.AccountResponseDTO;
-import com.hamza.accountservice.service.AccountSerivce;
+import com.hamza.accountservice.dtos.AccountRequestDto;
+import com.hamza.accountservice.dtos.AccountResponseDto;
+import com.hamza.accountservice.exceptions.AccountNotFound;
+import com.hamza.accountservice.service.AccountService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -16,26 +16,32 @@ import java.util.UUID;
 
 @Controller
 @Slf4j @AllArgsConstructor
-public class AccountGraphQlController {
-    private AccountSerivce accountService;
+public class AccountGraphQLController {
+    private AccountService accountService;
 
     @QueryMapping
-    public AccountResponseDTO account(@Argument UUID id) {
-        return accountService.getAccountById(id);
-    }
-
-    @QueryMapping
-    public List<AccountResponseDTO> accounts() {
+    public List<AccountResponseDto> accountList() {
         return accountService.listAccount();
     }
 
-    @MutationMapping
-    public AccountResponseDTO createAccount(@Argument AccountInput input) {
-
-        AccountRequestDTO account = new AccountRequestDTO();
-        account.setCustomerReference(input.customerReference());
-        account.setCurrency(input.currency());
-
-        return accountService.saveAccount(account);
+    @QueryMapping
+    public AccountResponseDto getAccountById (@Argument UUID id) throws AccountNotFound {
+        return accountService.getAccountById(id);
     }
+
+    @MutationMapping
+    public AccountResponseDto saveAccount (@Argument AccountRequestDto requestDto) {
+        return accountService.saveAccount(requestDto);
+    }
+
+    @MutationMapping
+    public AccountResponseDto updateAccount(@Argument AccountRequestDto requestDto) throws AccountNotFound {
+        return accountService.updateAccount(requestDto);
+    }
+
+    @MutationMapping
+    public void deleteAccount(@Argument UUID id) throws AccountNotFound{
+        accountService.deleteAccount(id);
+    }
+
 }

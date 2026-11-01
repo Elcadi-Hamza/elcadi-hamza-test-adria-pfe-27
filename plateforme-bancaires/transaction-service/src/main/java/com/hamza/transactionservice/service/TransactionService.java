@@ -1,16 +1,16 @@
 package com.hamza.transactionservice.service;
 
-import com.hamza.transactionservice.dto.TransactionRequestDTO;
-import com.hamza.transactionservice.dto.TransactionResponseDTO;
-import com.hamza.transactionservice.exception.AccountNotFoundException;
-import com.hamza.transactionservice.exception.AmountInvalid;
+import com.hamza.transactionservice.dtos.TransactionRequestDto;
+import com.hamza.transactionservice.dtos.TransactionResponseDto;
+import com.hamza.transactionservice.exceptions.AccountNotActif;
+import com.hamza.transactionservice.exceptions.TransactionAmountNotRespected;
+import com.hamza.transactionservice.exceptions.TransactionNotFound;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface TransactionService {
-    TransactionResponseDTO saveTransaction(TransactionRequestDTO requestDTO) throws AccountNotFoundException, AmountInvalid;
-    TransactionResponseDTO getTransaction(UUID id) throws AccountNotFoundException;
-    List<TransactionResponseDTO> getAllTransactions();
-    List<TransactionResponseDTO> getTransactionsByAccount(UUID accountId);
+    List<TransactionResponseDto> getAllTransactions();
+    TransactionResponseDto getTransactionById(UUID id) throws TransactionNotFound;
+    TransactionResponseDto saveTransaction(TransactionRequestDto requestDto) throws AccountNotActif, TransactionAmountNotRespected;
 }
